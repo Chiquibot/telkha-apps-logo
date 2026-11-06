@@ -6,4 +6,5 @@ window.TELKHA_APPS = {
   approval: 'https://script.google.com/a/macros/telkha.com/s/AKfycbw5tjpTQ8WqpuSAM9bLNh4oRJPG52rjXqSglXGnHe02aV-WwrPOOIqM7IcCBUG8m_XxDA/exec',   // TAP Approval
   sahod:    'https://script.google.com/a/macros/telkha.com/s/AKfycbzxAoD0OM2hdsTYeOacyv-JBEwpc8JrJ57qOXNqHesklkxI5wXzcAET6ZS7IIFS6vAphw/exec',   // SAHOD payroll
   cashflow: 'https://script.google.com/a/macros/telkha.com/s/AKfycbwp4nPOaVPF5OxmyPaW3tnfSfgdnEdeBru67eH17O3pB7JB_w1KgRSon2IKhQbUq-PQ1A/exec'    // TELKHA Cashflow (SCM, AR, Opex, P&L)
+  ,control: ''    // TAP Control (owner only; deployed "Only myself")
 };

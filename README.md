@@ -9,6 +9,7 @@ Home-screen and browser-tab icons for the TAP ecosystem, plus a small launcher p
 | TAP Approval | `/approval/` | `icons/approval-512.png` |
 | SAHOD | `/sahod/` | `icons/sahod-512.png` |
 | TELKHA Cashflow | `/cashflow/` | `icons/cashflow-512.png` |
+| TAP Control (owner only, not on the hub page) | `/control/` | `icons/control-512.png` |
 
 ## Setup
 1. **Settings → Pages →** Deploy from a branch → `main` / root. The site is then at `https://chiquibot.github.io/telkha-apps-logo/`.
