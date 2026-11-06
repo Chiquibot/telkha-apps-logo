@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TAP Pulse</title>
+<meta name="description" content="Live team map, logins and timesheets for PMs and coordinators.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="../icons/pulse-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="../icons/pulse-192.png">
+<link rel="apple-touch-icon" href="../icons/pulse-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="TAP Pulse">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0b1118">
+<style>
+  :root{--bg:#0b1118;--card:#18222e;--line:#2a3746;--tx:#e8eef5;--mut:#8ea0b4;--or:#FF8A1F}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;display:flex;align-items:center;justify-content:center;padding:24px 16px}
+  main{width:100%;max-width:420px;text-align:center}
+  .icon{width:128px;height:128px;border-radius:28px;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+  h1{font-size:24px;margin:18px 0 4px}
+  p.sub{color:var(--mut);margin:0 0 22px}
+  .btn{display:block;width:100%;padding:14px 18px;border-radius:12px;border:0;font:600 16px system-ui,sans-serif;text-decoration:none;cursor:pointer}
+  .go{background:var(--or);color:#1b0f02}
+  .inst{background:transparent;color:var(--tx);border:1px solid var(--line);margin-top:10px;display:none}
+  .box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:22px;text-align:left}
+  .box h2{font-size:14px;margin:0 0 8px;color:var(--or);text-transform:uppercase;letter-spacing:.06em}
+  .box ol{margin:0;padding-left:20px}.box li{margin:4px 0}
+  .warn{color:#f2994a}
+  .opening{color:var(--mut);margin-top:12px}
+  footer{color:var(--mut);font-size:12px;margin-top:22px}
+</style>
+</head>
+<body>
+<main>
+  <img class="icon" src="../icons/pulse-512.png" alt="TAP Pulse icon">
+  <h1>TAP Pulse</h1>
+  <p class="sub">Live team map, logins and timesheets for PMs and coordinators.</p>
+  <a id="go" class="btn go" href="#">Open TAP Pulse</a>
+  <button id="install" class="btn inst" type="button">Install on this phone</button>
+  <div id="msg" class="opening"></div>
+
+  <div class="box" id="howto">
+    <h2>Add the icon to your home screen</h2>
+    <div id="ios" hidden><ol>
+      <li>Open this page in <b>Safari</b>.</li>
+      <li>Tap the <b>Share</b> button (square with an arrow).</li>
+      <li>Choose <b>Add to Home Screen</b>, then <b>Add</b>.</li>
+    </ol></div>
+    <div id="android" hidden><ol>
+      <li>Open this page in <b>Chrome</b>.</li>
+      <li>Tap <b>Install on this phone</b> above, or the <b>⋮</b> menu → <b>Add to Home screen</b> / <b>Install app</b>.</li>
+    </ol></div>
+    <div id="desktop" hidden><ol>
+      <li>In <b>Chrome</b>, click the install icon in the address bar, or <b>⋮</b> → <b>Cast, save and share</b> → <b>Install page as app</b>.</li>
+      <li>Or just bookmark this page.</li>
+    </ol></div>
+  </div>
+  <footer>Telkha Network Inc.</footer>
+</main>
+<script src="../apps.js"></script>
+<script>
+(function () {
+  var url = (window.TELKHA_APPS || {})['pulse'] || '';
+  var go = document.getElementById('go'), msg = document.getElementById('msg');
+  var ua = navigator.userAgent;
+  var isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var isAndroid = /Android/.test(ua);
+  document.getElementById(isIOS ? 'ios' : isAndroid ? 'android' : 'desktop').hidden = false;
+
+  if (!/^https:\/\//.test(url)) {
+    go.removeAttribute('href'); go.style.opacity = '.5';
+    msg.innerHTML = '<span class="warn">The app link is not set yet. Ask the TAP admin to fill in apps.js.</span>';
+    return;
+  }
+  go.href = url;
+
+  // Opened from the home-screen icon: go straight to the app
+  var launched = /[?&]launch=1/.test(location.search) || navigator.standalone === true ||
+    (window.matchMedia && (matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: minimal-ui)').matches));
+  if (launched) {
+    document.getElementById('howto').hidden = true;
+    msg.textContent = 'Opening TAP Pulse…';
+    location.replace(url);
+    return;
+  }
+
+  // Android / desktop Chrome: one-tap install button
+  var prompt = null, btn = document.getElementById('install');
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault(); prompt = e; btn.style.display = 'block';
+  });
+  btn.addEventListener('click', function () {
+    if (!prompt) return;
+    prompt.prompt();
+    prompt.userChoice.finally(function () { prompt = null; btn.style.display = 'none'; });
+  });
+  window.addEventListener('appinstalled', function () { msg.textContent = 'Installed. Use the TAP Pulse icon on your home screen.'; });
+})();
+</script>
+</body>
+</html>
